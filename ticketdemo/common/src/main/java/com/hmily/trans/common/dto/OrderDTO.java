@@ -5,11 +5,17 @@ public class OrderDTO {
 
     private Long id;
 
+    private String uuid;
+
+    private Long customerId;
+
     private String title;
 
-    private String detail;
+    private Long ticketNum;
 
     private int amount;
+
+    private String status;
 
     public Long getId() {
         return id;
@@ -17,6 +23,22 @@ public class OrderDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public String getTitle() {
@@ -27,12 +49,12 @@ public class OrderDTO {
         this.title = title;
     }
 
-    public String getDetail() {
-        return detail;
+    public Long getTicketNum() {
+        return ticketNum;
     }
 
-    public void setDetail(String detail) {
-        this.detail = detail;
+    public void setTicketNum(Long ticketNum) {
+        this.ticketNum = ticketNum;
     }
 
     public int getAmount() {
@@ -41,5 +63,13 @@ public class OrderDTO {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
