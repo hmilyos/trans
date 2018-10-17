@@ -36,4 +36,14 @@ public class TicketController {
         return ticketService.getAll();
     }
 
+    @PostMapping("/lock")
+    public Ticket lock(@RequestBody OrderDTO orderDTO){
+        return ticketService.lockTicket(orderDTO);
+    }
+
+    @PostMapping("/lock2")
+    public int lock2(@RequestBody OrderDTO orderDTO){
+        return ticketService.lockTicket2(orderDTO);
+    }
+
 }

@@ -30,7 +30,7 @@ public class TicketServiceImpl implements ITicketService {
     @Autowired
     private TicketRepository ticketRepository;
     
-//    生成新订单
+//    生成新订单(锁票操作)
     @Transactional
     @JmsListener(destination = "order:new", containerFactory = "msgFactory")
     public void handleTicketLock(OrderDTO msg) {
@@ -42,13 +42,13 @@ public class TicketServiceImpl implements ITicketService {
     		 msg.setStatus("TICKET_LOCK_FAIL");
              jmsTemplate.convertAndSend("order:fail", msg);
     	 } else {
-//    		 能获取到锁，生成订单成功
+//    		 能获取到锁，生成锁票成功
     		 msg.setStatus("TICKET_LOCKED");
              jmsTemplate.convertAndSend("order:locked", msg);
 		}
     }
 
-//    解锁并把票的所有者信息写进去，锁票人和票的所有者一致
+//    解锁并把票的所有者信息写进去，锁票人和票的所有者一致，
     @Transactional
     @JmsListener(destination = "order:ticket_move", containerFactory = "msgFactory")
     public void handleTicketMove(OrderDTO msg) {
