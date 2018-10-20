@@ -19,6 +19,7 @@ public class OrderController {
     @Transactional
     @PostMapping("")
     public void create(@RequestBody OrderDTO dto) {
+//        接收到购票的请求
         orderService.create(dto);
     }
     @GetMapping("/{customerId}")

@@ -14,6 +14,11 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     Ticket findOneByTicketNum(Long num);
 
+//    设置不去做自动同步的优化处理，每次执行完就同步到数据库上
+    @Override
+    @Modifying(clearAutomatically = true)
+    Ticket save(Ticket ticket);
+
     //    @Modifying(clearAutomatically = true)
     @Modifying
     @Query("UPDATE ticket SET lockUser = ?1 WHERE lockUser is NULL and ticketNum = ?2")

@@ -29,6 +29,7 @@ public class OrderServiceImpl implements IOrderService {
 
     private TimeBasedGenerator uuidGenerator = Generators.timeBasedGenerator();
 
+//    接收 锁票成功的消息
     @Transactional
     @JmsListener(destination = "order:locked", containerFactory = "msgFactory")
     public void handle(OrderDTO msg) {
@@ -42,6 +43,7 @@ public class OrderServiceImpl implements IOrderService {
             msg.setId(order.getId());
         }
         msg.setStatus("NEW");
+//        订单创建成功，通知去支付
         jmsTemplate.convertAndSend("order:pay", msg);
     }
 
@@ -57,6 +59,7 @@ public class OrderServiceImpl implements IOrderService {
         return order;
     }
 
+//    订单完成
     @Transactional
     @JmsListener(destination = "order:finish", containerFactory = "msgFactory")
     public void handleFinish(OrderDTO msg) {
@@ -67,6 +70,7 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     /**
+     * 接收订单失败的消息
      * 订单失败的几种情况：
      * 1. 一开始索票失败。
      * 2. 扣费失败后，解锁票，然后出发
@@ -85,6 +89,8 @@ public class OrderServiceImpl implements IOrderService {
             order = orderRepository.findOne(msg.getId());
             if (msg.getStatus().equals("NOT_ENOUGH_DEPOSIT")) {
                 order.setReason("NOT_ENOUGH_DEPOSIT");
+            } else if (msg.getStatus().equals("updata_deposit_error")){
+                order.setReason("updata_deposit_error");
             }
         }
         order.setStatus("FAIL");
@@ -93,6 +99,8 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public void create(OrderDTO dto) {
+//        对购票信息添加一个唯一 id 用于做幂等性判断
+//        然后就丢到消息队列里面，流转到下一步 锁票操作
         dto.setUuid(uuidGenerator.generate().toString());
         jmsTemplate.convertAndSend("order:new", dto);
     }

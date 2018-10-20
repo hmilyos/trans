@@ -36,11 +36,12 @@ public class TicketController {
         return ticketService.getAll();
     }
 
+//    测试锁票方法 1
     @PostMapping("/lock")
     public Ticket lock(@RequestBody OrderDTO orderDTO){
         return ticketService.lockTicket(orderDTO);
     }
-
+//    测试锁票方法 2
     @PostMapping("/lock2")
     public int lock2(@RequestBody OrderDTO orderDTO){
         return ticketService.lockTicket2(orderDTO);
