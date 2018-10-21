@@ -1,0 +1,11 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: proxy
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://hmily:111@localhost:8761/eureka/
+
